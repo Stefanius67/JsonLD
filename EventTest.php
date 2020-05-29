@@ -14,16 +14,22 @@ $oJsonLD->addOffer('VIP', 250, 'GBP', $oJsonLD::AVAILABLE_PRE_ORDER, new DateTim
 $oJsonLD->setOrganizer('Queen Mum', 'https://www.lissyII.uk');
 $oJsonLD->addPerformer('U2');
 $oJsonLD->addPerformer('Elton John');
-$oJsonLD->addImage('elephpant.png');
+$oJsonLD->addImage('elephpant.png');    // use bigger image - only for test purposes to avoid warning from test tool
 ?>
 <!DOCTYPE html>
 <html>
 <head>
 <title>Json LD Generator</title>
+<!-- insert the tag in the head section of the document -->
 <?php echo $oJsonLD->getHTMLHeadTag(false);?>
 </head>
 <body>
     <h1>Json LD Generator - Event</h1>
+    <p>You can copy generated JsonLD script to test it in 
+        <a target="_blank" href="https://search.google.com/structured-data/testing-tool">
+            https://search.google.com/structured-data/testing-tool
+        </a>
+    </p>
     <textarea style="font-family: 'Courier'; width: 100%; white-space: nowrap;" rows="50" spellcheck="false">
     <?php echo $oJsonLD->getJson(true);?>
     </textarea>

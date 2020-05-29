@@ -53,6 +53,7 @@ $oJsonLD->addPerformer('Elton John');
 <html>
 <head>
 <title>Json LD Generator</title>
+<!-- insert the tag in the head section of the document -->
 <?php echo $oJsonLD->getHTMLHeadTag(false);?>
 </head>
 ```
