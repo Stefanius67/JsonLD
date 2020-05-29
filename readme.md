@@ -20,11 +20,11 @@ Website owners have the advantage that this additional information is sometimes 
 
 ### Important: 
 Google does not guarantee that your structured data will show up in search results, even if your page is marked up correctly according to the Structured Data Testing Tool. Here are some common reasons why:
-> - Using structured data enables a feature to be present, it does not guarantee that it will be present. The Google algorithm tailors search results to create what it thinks is the best search experience for a user, depending on many variables, including search history, location, and device type. In some cases it may determine that one feature is more appropriate than another, or even that a plain blue link is best.
-> - The structured data is not representative of the main content of the page, or is potentially misleading.
-> - The structured data is incorrect in a way that the testing tool was not able to catch.
-> - The content referred to by the structured data is hidden from the user.
-> - The page does not meet the guidelines for structured data described here, the type-specific guidelines, or the general webmaster guidelines.
+ - Using structured data enables a feature to be present, it does not guarantee that it will be present. The Google algorithm tailors search results to create what it thinks is the best search experience for a user, depending on many variables, including search history, location, and device type. In some cases it may determine that one feature is more appropriate than another, or even that a plain blue link is best.
+ - The structured data is not representative of the main content of the page, or is potentially misleading.
+ - The structured data is incorrect in a way that the testing tool was not able to catch.
+ - The content referred to by the structured data is hidden from the user.
+ - The page does not meet the guidelines for structured data described here, the type-specific guidelines, or the general webmaster guidelines.
 
 
 
