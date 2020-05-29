@@ -12,7 +12,7 @@ Structured data helps search engines understand web pages better. Semantic annot
 
 With the help of *Linked Data*, a website provides not only the presentation, but also its content in machine-readable and classifiable form for further processing and categorization.
 
-In addition to **JsonLD**, **Microdata** and **RDFa** are often used to integrate linked data into a website. The most important difference between **JsonLD** and **Microdata** or **RDFa** is that the structured data is stored in the ***&lt;head&gt;*** area of a page (and no longer within the ***&lt;body&gt;***, as with the other methods). This means that existing HTML elements do not have to be expanded or optimized. In this way, existing pages can be expanded much more quickly with *Linked Data*, and the generation of the *Linked Data* and the generation of the HTML code for displaying the page are clearly separated from each other.
+In addition to **JsonLD**, **Microdata** and **RDFa** are often used to integrate linked data into a website. The most important difference between **JsonLD** and **Microdata** or **RDFa** is that the structured data is stored in the **[head]** area of a page (and no longer within the **[body]** as with the other methods). This means that existing HTML elements do not have to be expanded or optimized. In this way, existing pages can be expanded much more quickly with *Linked Data*, and the generation of the *Linked Data* and the generation of the HTML code for displaying the page are clearly separated from each other.
 
 Structured data helps search engines put the information on your website in the right context. This enables search engines to better determine what the website is about.
 
