@@ -114,12 +114,10 @@ class JsonLDEvent extends JsonLD
     public function setAdress(string $strStreet, string $strPostcode, string $strCity, string $strRegion = '', string $strCountry = '') : void
     {
         $aAddress = $this->buildAdress($strStreet, $strPostcode, $strCity, $strRegion, $strCountry);
-        if ($aAddress != null) {
-            if (!isset($this->aJsonLD["location"]) || !is_array($this->aJsonLD["location"])) {
-                $this->aJsonLD["location"] = array("@type" => "Place");
-            }
-            $this->aJsonLD["location"]["address"] = $aAddress;
+        if (!isset($this->aJsonLD["location"]) || !is_array($this->aJsonLD["location"])) {
+            $this->aJsonLD["location"] = array("@type" => "Place");
         }
+        $this->aJsonLD["location"]["address"] = $aAddress;
     }
 
     /**

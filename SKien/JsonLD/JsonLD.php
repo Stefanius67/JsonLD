@@ -128,7 +128,7 @@ class JsonLD
         $aLogo = null;
         if (file_exists($strURL)) {
             $aSize = getimagesize($strURL);
-            if ($aSize) {
+            if ($aSize !== false) {
                 $aLogo = array(
                                 "@type" => "ImageObject",
                                 "url" =>  $strURL,
@@ -350,7 +350,7 @@ class JsonLD
             } elseif (is_numeric($date)) {
                 // unix timestamp
                 $uxts = intval($date);
-            } else {
+            } elseif (is_string($date)) {
                 $uxts = strtotime($date);
                 if ($uxts === false) {
                     $uxts = 0;
