@@ -1,34 +1,32 @@
 <?php
+declare(strict_types=1);
+
 namespace SKien\JsonLD;
 
 /**
- * Adding structured data to any of your event pages. 
- * 
- * https://developers.google.com/search/docs/data-types/event
- * 
- * https://schema.org/Event
- * 
+ * Adding structured data to any of your event pages.
+ *
  * ### Avoid marking non-events as events:
- *  - Don’t promote non-event products or services such as 
+ *  - Don’t promote non-event products or services such as
  *      "Trip package: San Diego/LA, 7 nights" as events.
- *  - Don’t add short-term discounts or purchase opportunities, such as: 
+ *  - Don’t add short-term discounts or purchase opportunities, such as:
  *      "Concert — buy your tickets now," or "Concert - 50% off until Saturday."
- *  - Don’t mark business hours as events, such as: 
+ *  - Don’t mark business hours as events, such as:
  *      "Adventure park open 8 AM to 5PM."
- *  - Don't mark coupons or vouchers as events, such as: 
+ *  - Don't mark coupons or vouchers as events, such as:
  *      "5% off your first order."
- *      
+ *
  * ### Mark up multi-day events correctly:
- *  - If your event or ticket info is for an event that runs over several 
+ *  - If your event or ticket info is for an event that runs over several
  *    days, specify both the start and end dates of the event.
- *  - If there are several different performances across different days, each 
+ *  - If there are several different performances across different days, each
  *    with individual tickets, add a separate Event element for each performance.
- *    
- * ### required properties: 
+ *
+ * ### required properties:
  *  - name
  *  - startdate
  *  - location
- * 
+ *
  * ### recomended properties:
  *  - enddate
  *  - eventAttendanceMode (will be set automaticaly)
@@ -38,65 +36,58 @@ namespace SKien\JsonLD;
  *  - offers
  *  - organizer
  *  - performer
- * 
- * 
- * ### History
- * ** 2020-05-28 **
- * - initial version.
- * 
- * @package SKien-JsonLD
- * @since 1.0.0
- * @version 1.0.0
- * @author Stefanius <s.kien@online.de>
+ *
+ * @link https://developers.google.com/search/docs/data-types/event
+ * @link https://schema.org/Event
+ *
+ * @package JsonLD
+ * @author Stefanius <s.kientzler@online.de>
  * @copyright MIT License - see the LICENSE file for details
  */
 class JsonLDEvent extends JsonLD
 {
     /** The event is scheduled (default value for the status) */
-    const   EVENT_SCHEDULED     = 'EventScheduled';
+    public const EVENT_SCHEDULED     = 'EventScheduled';
     /** The event is cancelled */
-    const   EVENT_CANCELLED     = 'EventCancelled';
+    public const EVENT_CANCELLED     = 'EventCancelled';
     /** The event moved to online event */
-    const   EVENT_MOVED_ONLINE  = 'EventMovedOnline';
+    public const EVENT_MOVED_ONLINE  = 'EventMovedOnline';
     /** The event is postponed */
-    const   EVENT_POSTPONED     = 'EventPostponed';
+    public const EVENT_POSTPONED     = 'EventPostponed';
     /** The event is re-scheduled */
-    const   EVENT_RESCHEDULED   = 'EventRescheduled';
+    public const EVENT_RESCHEDULED   = 'EventRescheduled';
 
     /** Tickets available in stock  */
-    const   AVAILABLE_IN_STOCK  = 'InStock';
+    public const AVAILABLE_IN_STOCK  = 'InStock';
     /** No more tickets of this categorie available  */
-    const   AVAILABLE_SOLD_OUT  = 'SoldOut';
+    public const AVAILABLE_SOLD_OUT  = 'SoldOut';
     /** Tickets can be pre ordered  */
-    const   AVAILABLE_PRE_ORDER = 'PreOrder';
-    
+    public const AVAILABLE_PRE_ORDER = 'PreOrder';
+
     /** Event is performed/organized by person(s) */
-    const   ORGANIZATION    = 'Organization';
+    public const ORGANIZATION    = 'Organization';
     /** Event is performed/organized by group */
-    const   GROUP           = 'PerformingGroup';
+    public const GROUP           = 'PerformingGroup';
     /** Event is performed/organized by person(s) */
-    const   PERSON          = 'Person';
-    
+    public const PERSON          = 'Person';
+
     /**
      * Initializes a JsonLD object for article.
-     * Set the main entity of the page to
-     * WebPage with @id = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']
-     * @param string $strType
-     */ 
+     */
     public function __construct()
     {
         parent::__construct(self::EVENT, 'Event');
         $this->aJsonLD["eventAttendanceMode"] = 'https://schema.org/OfflineEventAttendanceMode';
         $this->aJsonLD["eventStatus"] = 'https://schema.org/EventScheduled';
     }
-    
+
     /**
      * Set the main infos for the event.
      * @param string $strName
      * @param mixed $start      can be string (format YYYY-MM-DD HH:ii:ss), int (unixtimestamp) or DateTime - object
      * @param mixed $end        can be string (format YYYY-MM-DD HH:ii:ss), int (unixtimestamp) or DateTime - object
      */
-    public function setInfo($strName, $start, $end=null)
+    public function setInfo(string $strName, $start, $end = null) : void
     {
         $strName = $this->validString($strName);
         if (strlen($strName) > 0) {
@@ -109,7 +100,7 @@ class JsonLDEvent extends JsonLD
             }
         }
     }
-    
+
     /**     * Set postal adress of the business.
      * Here it makes sense to enter as many properties as possible. The more you
      * specify, the more informative the result will be for users.
@@ -120,7 +111,7 @@ class JsonLDEvent extends JsonLD
      * @param string $strRegion     (default: '')
      * @param string $strCountry    (default: '')
      */
-    public function setAdress($strStreet, $strPostcode, $strCity, $strRegion='', $strCountry='')
+    public function setAdress(string $strStreet, string $strPostcode, string $strCity, string $strRegion = '', string $strCountry = '') : void
     {
         $aAddress = $this->buildAdress($strStreet, $strPostcode, $strCity, $strRegion, $strCountry);
         if ($aAddress != null) {
@@ -130,15 +121,15 @@ class JsonLDEvent extends JsonLD
             $this->aJsonLD["location"]["address"] = $aAddress;
         }
     }
-    
+
     /**
      * Set the virlual location of the event.
      * If the event is happening online, use this method instead of setLocation() / setAdress().
      * If an event has a mix of online and physical location components, FIRST call
-     * setLocation() / setAdress() for the physical component and THEN call setVirtualLocation(). 
+     * setLocation() / setAdress() for the physical component and THEN call setVirtualLocation().
      * @param string $strURL
      */
-    public function setVirtualLocation($strURL)
+    public function setVirtualLocation(string $strURL) : void
     {
         $strURL = $this->validURL($strURL);
         if (strlen($strURL) > 0) {
@@ -164,23 +155,20 @@ class JsonLDEvent extends JsonLD
      * - self::EVENT_MOVED_ONLINE
      * - self::EVENT_POSTPONED
      * - self::EVENT_RESCHEDULED
-     * 
-     * If the event has been canceled or postponed, don't remove or change other 
-     * properties (for example, don't remove startDate or location) instead, keep all 
-     * values as the same as they were before the cancelation, and only update the 
+     * If the event has been canceled or postponed, don't remove or change other
+     * properties (for example, don't remove startDate or location) instead, keep all
+     * values as the same as they were before the cancelation, and only update the
      * eventStatus.
-     *
-     * If the event has been postponed to a later date, but the date isn't known yet, 
-     * Keep the original date in the startDate of the event until you know when the 
-     * event will take place. Once you know the new date information, change the 
-     * eventStatus to EventRescheduled and update the startDate and endDate with the 
-     * new date information. Optionally, you can also mark the eventStatus field as 
+     * If the event has been postponed to a later date, but the date isn't known yet,
+     * Keep the original date in the startDate of the event until you know when the
+     * event will take place. Once you know the new date information, change the
+     * eventStatus to EventRescheduled and update the startDate and endDate with the
+     * new date information. Optionally, you can also mark the eventStatus field as
      * rescheduled and add the previousStartDate.
-     * 
      * @param string $strStatus
      * @param mixed $prevstart      can be string (format YYYY-MM-DD HH:ii:ss), int (unixtimestamp) or DateTime - object
      */
-    public function setStatus($strStatus, $prevstart=null)
+    public function setStatus(string $strStatus, $prevstart = null) : void
     {
         $aValid = array('EventScheduled', 'EventCancelled', 'EventMovedOnline', 'EventPostponed', 'EventRescheduled');
         if (in_array($strStatus, $aValid)) {
@@ -190,22 +178,21 @@ class JsonLDEvent extends JsonLD
             $this->aJsonLD["previousStartDate"] = $this->validDate($prevstart);
         }
     }
-    
+
     /**
      * Add offer for tickets to the event.
      * Valid values for $strAvailable are one of
      * - self::AVAILABLE_IN_STOCK
      * - self::AVAILABLE_SOLD_OUT
      * - self::AVAILABLE_PRE_ORDER
-     * 
      * @param string    $strName          Description or categorie of the ticket
      * @param float     $dftPrice         Price (should include service charges and fees)
      * @param string    $strCur           The 3-letter currency code.
      * @param string    $strAvailable     Availability
      * @param mixed     $validFrom        Offer valid from, may be string (format YYYY-MM-DD HH:ii:ss), int (unixtimestamp) or DateTime - object
-     * @param string    $strURL           landing page that clearly and predominantly provides the opportunity to buy a ticket 
+     * @param string    $strURL           landing page that clearly and predominantly provides the opportunity to buy a ticket
      */
-    public function addOffer($strName, $dftPrice, $strCur, $strAvailable=self::AVAILABLE_IN_STOCK, $validFrom=null, $strURL='')
+    public function addOffer(string $strName, float $dftPrice, string $strCur, $strAvailable = self::AVAILABLE_IN_STOCK, $validFrom = null, string $strURL = '') : void
     {
         $aValid = array('InStock', 'SoldOut', 'PreOrder');
         if (in_array($strAvailable, $aValid)) {
@@ -221,7 +208,7 @@ class JsonLDEvent extends JsonLD
             }
             if ($dftPrice > 0.0) {
                 $aOffer['price'] = $dftPrice;
-            } 
+            }
             if (strlen($strCur) > 0) {
                 $aOffer['priceCurrency'] = $strCur;
             }
@@ -237,19 +224,18 @@ class JsonLDEvent extends JsonLD
             $this->aJsonLD['offers'][] = $aOffer;
         }
     }
-    
+
     /**
      * Set organizer of the event.
      * Valid values for $strType are one of
      * - self::GROUP
      * - self::PERSON
      * - self::ORGANIZATION
-     * 
      * @param string $strName
      * @param string $strURL
      * @param string $strType
      */
-    public function setOrganizer($strName, $strURL='', $strType=self::ORGANIZATION)
+    public function setOrganizer(string $strName, string $strURL = '', string $strType=self::ORGANIZATION) : void
     {
         $aValid = array('PerformingGroup', 'Person', 'Organization');
         $strName = $this->validString($strName);
@@ -264,19 +250,18 @@ class JsonLDEvent extends JsonLD
             }
         }
     }
-    
+
     /**
      * Add performer of the event.
      * Valid values for $strType are one of
      * - self::GROUP
      * - self::PERSON
      * - self::ORGANIZATION
-     * 
      * @param string $strName
      * @param string $strURL
      * @param string $strType
      */
-    public function addPerformer($strName, $strURL='', $strType=self::GROUP)
+    public function addPerformer(string $strName, string $strURL = '', string $strType = self::GROUP) : void
     {
         $aValid = array('PerformingGroup', 'Person', 'Organization');
         $strName = $this->validString($strName);

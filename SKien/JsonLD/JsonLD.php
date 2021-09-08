@@ -1,66 +1,66 @@
 <?php
+declare(strict_types=1);
+
 namespace SKien\JsonLD;
+
 /**
- * Base class of the package, which provides all basic functions 
- * for generating the valid JsonLD objects of different types.
- * 
- * https://search.google.com/structured-data/testing-tool
- * 
- * https://developers.google.com/search/docs/guides/sd-policies
- * 
- * https://www.w3.org/TR/json-ld11/
+ * Base class of the package.
+ * The class provides all basic functions for generating valid JsonLD objects of
+ * different types.
  *
- * 
- * ### History
- * ** 2020-05-25 **
- * - initial version.
- * 
- * @package SKien-JsonLD
- * @since 1.0.0
- * @version 1.0.0
- * @author Stefanius <s.kien@online.de>
+ * @link https://search.google.com/structured-data/testing-tool
+ * @link https://developers.google.com/search/docs/guides/sd-policies
+ * @link https://www.w3.org/TR/json-ld11/
+ *
+ * @package JsonLD
+ * @author Stefanius <s.kientzler@online.de>
  * @copyright MIT License - see the LICENSE file for details
  */
 class JsonLD
 {
+    /** constants for JsonLD type */
+    public const __TYPE = '';
     /** type: LocalBusiness or subtype  */
-    const   LOCAL_BUSINESS  = 0;
+    public const LOCAL_BUSINESS = 0;
     /** type: Article, NewsArticle,   */
-    const   ARTICLE         = 1;
+    public const ARTICLE = 1;
     /** type: Event   */
-    const   EVENT           = 2;
-    
-    /** internal validation for string   */
-    const   STRING  = 0;
-    /** internal validation for date   */
-    const   DATE    = 1;
-    /** internal validation for time   */
-    const   TIME    = 2;
-    /** internal validation for e-mail   */
-    const   EMAIL   = 3;
-    /** internal validation for url   */
-    const   URL     = 4;
+    public const EVENT = 2;
+
+    /** constants for validation */
+    public const __VALIDATION = '';
+    /** validation for string   */
+    public const STRING = 0;
+    /** validation for date   */
+    public const DATE = 1;
+    /** validation for time   */
+    public const TIME = 2;
+    /** validation for e-mail   */
+    public const EMAIL = 3;
+    /** validation for url   */
+    public const URL = 4;
 
     /** @var int    internal object type     */
-    protected $iType = '';
-    /** @var string type according the JsonLD spec     */
+    protected $iType = -1;
+    /** @var array<mixed>  the linked data as array     */
     protected $aJsonLD = null;
     /** @var bool   object is nested into another object     */
     protected $bIsChild = false;
-    
+
     /**
-     * Instantciation of JsonLD object
+     * Instanciation of JsonLD object.
      * @param int $iType        internal type
      * @param string $strType   type for JsonLD
+     * @param bool $bIsChild
      */
-    public function __construct($iType, $strType, $bIsChild=false)
+    public function __construct(int $iType, string $strType, bool $bIsChild = false)
     {
         $this->iType = $iType;
         $this->bIsChild = $bIsChild;
-        $this->aJsonLD = array(
-                "@context"  => "https://schema.org",
-                "@type"     => $strType
-            );
+        $this->aJsonLD = [
+            "@context" => "https://schema.org",
+            "@type" => $strType,
+        ];
     }
 
     /**
@@ -68,19 +68,19 @@ class JsonLD
      * Usable for all JsonLD types.
      * @param string $strDescription
      */
-    public function setDescription($strDescription)
+    public function setDescription(string $strDescription) : void
     {
         $this->setProperty("description", $strDescription);
     }
 
     /**
-     * Set location for the object
-     * @param string $strName       Name for the location 
-     * @param mixed $latitude       string/float
-     * @param mixed $longitude      string/float
-     * @param string $strMap        URL to map show the location
+     * Set location for the object.
+     * @param string $strName           Name for the location
+     * @param string|float $latitude    latidude
+     * @param string|float $longitude   longitude
+     * @param string $strMap            URL to a map that shows the location
      */
-    public function setLocation($strName, $latitude, $longitude, $strMap='')
+    public function setLocation(string $strName, $latitude, $longitude, string $strMap = '') : void
     {
         $aLocation = $this->buildLocation($strName, $latitude, $longitude, $strMap);
         if ($aLocation != null) {
@@ -91,14 +91,14 @@ class JsonLD
             }
         }
     }
-    
+
     /**
-     * Add image.
+     * Add an image.
      * Multiple images are supported. Only existing images can be set.
      * Pixel size (width/height) is detected from image file.
      * @param string $strImageURL
      */
-    public function addImage($strImageURL)
+    public function addImage(string $strImageURL) : void
     {
         $aImg = $this->buildImageObject($strImageURL);
         if ($aImg != null) {
@@ -120,10 +120,10 @@ class JsonLD
     /**
      * Build ImageObject property.
      * Logos and images are defiend as ImageObject.
-     * @param string $strURL
-     * @return array    array containing the property or null if invalid URL
+     * @param string $strURL    URL to a valid image (PNG, GIF, JPG)
+     * @return array<string>    array containing the property or null if invalid URL
      */
-    public function buildImageObject($strURL)
+    protected function buildImageObject(string $strURL) : ?array
     {
         $aLogo = null;
         if (file_exists($strURL)) {
@@ -141,16 +141,15 @@ class JsonLD
     }
 
     /**
-     * build postal adress object.
-     *
+     * Build a postal adress object.
      * @param string $strStreet
      * @param string $strPostcode
      * @param string $strCity
      * @param string $strRegion
      * @param string $strCountry
-     * @return array    array containing the property
+     * @return array<string>    array containing the property
      */
-    public function buildAdress($strStreet, $strPostcode, $strCity, $strRegion='', $strCountry='')
+    protected function buildAdress(string $strStreet, string $strPostcode, string $strCity, string $strRegion = '', string $strCountry = '') : array
     {
         $aAdress = array("@type" => "PostalAddress");
         if (strlen($strStreet) > 0) {
@@ -170,23 +169,22 @@ class JsonLD
         }
         return $aAdress;
     }
-    
+
     /**
-     * build location object.
-     *
-     * @param string $strName       Name for the location 
-     * @param mixed $latitude       string/float
-     * @param mixed $longitude      string/float
+     * Build a location object.
+     * @param string $strName       Name for the location
+     * @param string|float $latitude
+     * @param string|float $longitude
      * @param string $strMap        URL to map show the location
-     * @return array    array containing the property or null if invalid URL
+     * @return array<mixed>    array containing the property or null if invalid URL
      */
-    public function buildLocation($strName, $latitude, $longitude, $strMap)
+    protected function buildLocation(string $strName, $latitude, $longitude, string $strMap) : ?array
     {
         $aLocation = null;
-        $latitude = $this->validString($latitude);
-        $longitude = $this->validString($longitude);
+        $latitude = $this->validLongLat($latitude);
+        $longitude = $this->validLongLat($longitude);
         $strMap = $this->validURL($strMap);
-    
+
         if ((strlen($latitude) > 0 && strlen($longitude) > 0) || strlen($strMap) > 0) {
             $aLocation = array("@type" => "Place");
             $strName = $this->validString($strName);
@@ -206,18 +204,17 @@ class JsonLD
         }
         return $aLocation;
     }
-    
+
     /**
-     * build contact point object.
+     * Build a contact point object.
      * The type must not contain any predefiend value, it is to describe the contact.
      * (i.e. 'Information', 'Hotline', 'Customer Service', 'Administration'...)
-     *
-     * @param string $strType   
+     * @param string $strType
      * @param string $strEMail
      * @param string $strPhone
-     * @return array    array containing the property or null if invalid URL
+     * @return array<string>    array containing the property or null if invalid URL
      */
-    public function buildContactPoint($strType, $strEMail, $strPhone)
+    protected function buildContactPoint(string $strType, string $strEMail, string $strPhone) : ?array
     {
         $aCP = null;
         $strType = $this->validString($strType);
@@ -235,25 +232,18 @@ class JsonLD
         }
         return $aCP;
     }
-    
-    /*
-     "sameAs" : [ "http://www.facebook.com/your-profile",
-     "http://www.twitter.com/yourProfile",
-     null    "http://plus.google.com/your_profile"]
-     */
 
     /**
-     * Set the property to vsalue of given type 
+     * Set the property to value of given type.
      * @param string $strName
      * @param string $strValue
      * @param int $iType
-     * @param string $strFormat
      */
-    public function setProperty($strName, $strValue, $iType=self::STRING, $strFormat='')
+    public function setProperty(string $strName, string $strValue, int $iType=self::STRING) : void
     {
         switch ($iType) {
             case self::DATE:
-                $strValue = $this->validDate($strValue, $strFormat);
+                $strValue = $this->validDate($strValue);
                 break;
             case self::TIME:
                 $strValue = $this->validTime($strValue);
@@ -273,13 +263,14 @@ class JsonLD
             $this->aJsonLD[$strName] = $strValue;
         }
     }
-    
+
     /**
-     * Get complete tag for the HTML head (including <script></script>)  
+     * Get complete tag for the HTML head.
+     * (including <script></script>)
      * @param bool $bPrettyPrint
      * @return string
      */
-    public function getHTMLHeadTag($bPrettyPrint=false)
+    public function getHTMLHeadTag(bool $bPrettyPrint = false) : string
     {
         $strTag = '';
         if (!$this->bIsChild) {
@@ -295,43 +286,60 @@ class JsonLD
      * @param bool $bPrettyPrint
      * @return string
      */
-    public function getJson($bPrettyPrint=false)
+    public function getJson(bool $bPrettyPrint = false) : string
     {
         $strJson = json_encode($this->aJsonLD, $bPrettyPrint ? JSON_PRETTY_PRINT : 0);
+        if ($strJson === false) {
+            $strJson = '';
+        }
         return $strJson;
     }
 
     /**
-     * Get the builded array object.
-     * @return array
+     * Get the array object.
+     * @return array<mixed>
      */
-    public function getObject()
+    public function getObject() : array
     {
         return $this->aJsonLD;
     }
-    
+
     /**
      * Build valid string value.
-     * @param unknown $str
-     * @return mixed
+     * @param string $str
+     * @return string
      */
-    protected function validString($str)
+    protected function validString(string $str) : string
     {
-        // replace " and all linebreaks from string
+        // replace " and all '\r' from string
         $str = str_replace('"', "'", $str);
         $str = str_replace("\r\n", "\n", $str);
         $str = str_replace("\r", "\n", $str);
         return $str;
     }
-    
+
     /**
-     * Build valid date value.
-     * If not time set (H,i and s == 0), only 'Y-m-d' format is used, otherwise
-     * the full ISO8601 format is used. 
-     * @param mixed $date       can be string (format YYYY-MM-DD {HH:ii:ss.}), int (unixtimestamp) or DateTime - object
+     * Build valid longitude/latidute value.
+     * @param float|string $longlat
      * @return string
      */
-    protected function validDate($date)
+    protected function validLongLat($longlat) : string
+    {
+        // TODO: long/lat validation
+        if (is_numeric($longlat)) {
+            $longlat = (string)$longlat;
+        }
+        return $longlat;
+    }
+
+    /**
+     * Build valid date value.
+     * If no time set (H,i and s == 0), only 'Y-m-d' format is used, otherwise
+     * the full ISO8601 format is used.
+     * @param string|int|\DateTime $date       can be string (format YYYY-MM-DD {HH:ii:ss.}), int (unixtimestamp) or DateTime - object
+     * @return string
+     */
+    protected function validDate($date) : string
     {
         $strDate = '';
         if ($date != null) {
@@ -341,26 +349,31 @@ class JsonLD
                 $uxts = $date->getTimestamp();
             } else if (is_numeric($date)) {
                 // unix timestamp
-                $uxts = $date;
+                $uxts = intval($date);
             } else {
                 $uxts = strtotime($date);
+                if ($uxts === false) {
+                    $uxts = 0;
+                }
             }
-            $strTime = date('H:i:s', $uxts);
-            if ($strTime == '00:00:00') {
-                $strDate = date('Y-m-d', $uxts);
-            } else {
-                $strDate = date(DATE_ISO8601, $uxts);
+            if ($uxts > 0) {
+                $strTime = date('H:i:s', $uxts);
+                if ($strTime == '00:00:00') {
+                    $strDate = date('Y-m-d', $uxts);
+                } else {
+                    $strDate = date(DATE_ISO8601, $uxts);
+                }
             }
         }
         return $strDate;
     }
 
     /**
-     * Build vaslid time value.
+     * Build valid time value.
      * @param string $strTime
      * @return string
      */
-    protected function validTime($strTime)
+    protected function validTime(string $strTime) : string
     {
         $aTime = explode(':', $strTime);
         $strTime = '';
@@ -373,13 +386,13 @@ class JsonLD
         }
         return $strTime;
     }
-    
+
     /**
      * Check for valid URL value.
      * @param string $strURL
      * @return string
      */
-    protected function validURL($strURL)
+    protected function validURL(string $strURL) : string
     {
         if (!($strURL = filter_var($strURL, FILTER_VALIDATE_URL))) {
             $strURL = '';
@@ -388,15 +401,15 @@ class JsonLD
     }
 
     /**
-     * Check for valid e-Mail adress
+     * Check for valid e-Mail adress.
      * @param string $strEMail
      * @return string
      */
-    protected function validEMail($strEMail)
+    protected function validEMail(string $strEMail) : string
     {
         if (!($strEMail = filter_var($strEMail, FILTER_VALIDATE_EMAIL))) {
             $strEMail = '';
-        }        
+        }
         return $strEMail;
     }
 
@@ -406,12 +419,12 @@ class JsonLD
      * cut off at $iMaxLen-3 characters and '...' appended. In the case of
      * a soft break, the text is cut off after the last word that fits within
      * the maximum length and the '...' is added.
-     * 
      * @param string    $strText
      * @param int       $iMaxLen
      * @param bool      $bHardBreak
+     * @return string
      */
-    static public function strTruncateEllipsis($strText, $iMaxLen, $bHardBreak=false)
+    protected function strTruncateEllipsis(string $strText, int $iMaxLen, bool $bHardBreak = false) : string
     {
         if (strlen($strText) > $iMaxLen - 3 && $iMaxLen > 4) {
             $strText = substr($strText, 0, $iMaxLen - 3);

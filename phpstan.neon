@@ -1,0 +1,15 @@
+#
+# run from the commandline in the base directory of the package:
+# 	phpstan analyse
+#
+# more infos and download:
+#	https://phpstan.org/user-guide/getting-started
+# 	https://github.com/phpstan/phpstan
+#
+parameters:
+	level: max
+	checkMissingIterableValueType: true
+	paths:
+		- SKien/JsonLD
+#	scanDirectories:
+#		- path to other package(s)

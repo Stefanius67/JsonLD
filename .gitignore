@@ -1,5 +1,6 @@
 /.settings/
 /.buildpath
 /.project
-/doc/
-/phpdoc/
+/wiki/
+/SKien/Test/JsonLD/coverage/
+/SKien/Test/JsonLD/temp/

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<githubwiki>
+    <title>JsonLD Generator</title>
+	
+    <paths>
+        <output>./wiki/JsonLD.wiki</output>
+    </paths>
+	
+	<source>
+		<path>SKien/JsonLD</path>
+	</source>
+</githubwiki>

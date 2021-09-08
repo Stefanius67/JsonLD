@@ -1,9 +1,8 @@
 # PHP JsonLD Generator: Generate *Linked Data* for embedding in a Website
-![Latest Stable Version](https://img.shields.io/badge/release-v1.0.0-brightgreen.svg) ![License](https://img.shields.io/packagist/l/gomoob/php-pushwoosh.svg) [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%205.6-8892BF.svg)](https://php.net/)
+ ![Latest Stable Version](https://img.shields.io/badge/release-v1.1.0-brightgreen.svg)
+ ![License](https://img.shields.io/packagist/l/gomoob/php-pushwoosh.svg)
+ [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.4-8892BF.svg)](https://php.net/)
 ----------
-## History
-##### 2020-05-25
-  * initial Version
 
 ## Overview
 JSON-LD is a syntax recommended by the W3C that can be used to embed structured data and generally applicable schemas for data structuring in the compact JSON format.
