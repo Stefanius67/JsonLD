@@ -302,7 +302,7 @@ class JsonLDLocalBusiness extends JsonLD
             }
             $iIndex = count($this->aJsonLD["location"]["openingHoursSpecification"]);
             $aOHS = array("@type" => "OpeningHoursSpecification");
-            $aDayOfWeek = array("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunnday");
+            $aDayOfWeek = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunnday");
             for ($i = 0; $i < 7; $i++) {
                 if ($aWeekdays[$i] != 1) {
                     unset($aDayOfWeek[$i]);

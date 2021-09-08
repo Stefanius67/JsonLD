@@ -223,10 +223,10 @@ class JsonLD
         if (strlen($strType) > 0) {
             $aCP = array("@type" => "ContactPoint");
             $aCP["contactType"] = $strType;
-            if (strlen($strEMail) > 0 ) {
+            if (strlen($strEMail) > 0) {
                 $aCP["email"] = $strEMail;
             }
-            if (strlen($strPhone) > 0 ) {
+            if (strlen($strPhone) > 0) {
                 $aCP["telephone"] = $strPhone;
             }
         }
@@ -239,7 +239,7 @@ class JsonLD
      * @param string $strValue
      * @param int $iType
      */
-    public function setProperty(string $strName, string $strValue, int $iType=self::STRING) : void
+    public function setProperty(string $strName, string $strValue, int $iType = self::STRING) : void
     {
         switch ($iType) {
             case self::DATE:
@@ -342,12 +342,12 @@ class JsonLD
     protected function validDate($date) : string
     {
         $strDate = '';
-        if ($date != null) {
+        if ($date !== null) {
             $uxts = 0;
             if (is_object($date) && get_class($date) == 'DateTime') {
                 // DateTime -object
                 $uxts = $date->getTimestamp();
-            } else if (is_numeric($date)) {
+            } elseif (is_numeric($date)) {
                 // unix timestamp
                 $uxts = intval($date);
             } else {
@@ -380,7 +380,7 @@ class JsonLD
         if (count($aTime) == 2) {
             $iHour = intval($aTime[0]);
             $iMin = intval($aTime[1]);
-            if ($iHour >= 0 && $iHour < 24 && $iMin >= 0 && $iMin <60) {
+            if ($iHour >= 0 && $iHour < 24 && $iMin >= 0 && $iMin < 60) {
                 $strTime = sprintf('%02d:%02d', $iHour, $iMin);
             }
         }

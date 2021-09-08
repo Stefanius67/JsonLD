@@ -197,7 +197,7 @@ class JsonLDEvent extends JsonLD
         $aValid = array('InStock', 'SoldOut', 'PreOrder');
         if (in_array($strAvailable, $aValid)) {
             $strName = $this->validString($strName);
-            $strCur =  strtoupper($this->validString($strCur));
+            $strCur = strtoupper($this->validString($strCur));
             $strURL = $this->validURL($strURL);
             if (!isset($this->aJsonLD['offers'])) {
                 $this->aJsonLD['offers'] = array();
@@ -235,7 +235,7 @@ class JsonLDEvent extends JsonLD
      * @param string $strURL
      * @param string $strType
      */
-    public function setOrganizer(string $strName, string $strURL = '', string $strType=self::ORGANIZATION) : void
+    public function setOrganizer(string $strName, string $strURL = '', string $strType = self::ORGANIZATION) : void
     {
         $aValid = array('PerformingGroup', 'Person', 'Organization');
         $strName = $this->validString($strName);
