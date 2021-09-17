@@ -4,6 +4,7 @@
  [![Donate](https://img.shields.io/static/v1?label=Donate&message=PayPal&color=orange)](https://www.paypal.me/SKientzler/5.00EUR)
  [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.4-8892BF.svg)](https://php.net/)
  [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Stefanius67/JsonLD/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Stefanius67/JsonLD/?branch=master)
+ [![codecov](https://codecov.io/gh/Stefanius67/JsonLD/branch/master/graph/badge.svg?token=QQ9228F0IG)](https://codecov.io/gh/Stefanius67/JsonLD)
  
 ----------
 
@@ -47,8 +48,8 @@ You can download the  Latest [release version ](https://www.phpclasses.org/packa
 $oJsonLD = new JsonLDEvent();
 
 $oJsonLD->setInfo('A great Concert for all...', new DateTime('2020-06-12 18:30'), new DateTime('2020-06-12 22:00'));
-$oJsonLD->setDescription('... would it not be amazing, if these two musicians could perform together!);
-$oJsonLD->setAdress('Kensington Gore', 'SW7 2AP', 'London', '', 'United Kingdom');
+$oJsonLD->setDescription('... would it not be amazing, if these two musicians could perform together!');
+$oJsonLD->setAddress('Kensington Gore', 'SW7 2AP', 'London', '', 'United Kingdom');
 $oJsonLD->setLocation('Royal Albert Hall', 51.5009088, -0.177366, 'https://www.google.com/maps/...');
 $oJsonLD->addOffer('Seat', 80, 'GBP', $oJsonLD::AVAILABLE_PRE_ORDER, 'https://www.tickets.com/rah');
 $oJsonLD->addOffer('VIP', 250, 'GBP', $oJsonLD::AVAILABLE_PRE_ORDER, 'https://www.tickets.com/rah');
