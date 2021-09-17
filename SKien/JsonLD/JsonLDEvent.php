@@ -46,6 +46,8 @@ namespace SKien\JsonLD;
  */
 class JsonLDEvent extends JsonLD
 {
+    /** constants for Event status */
+    public const __STATUS = '';
     /** The event is scheduled (default value for the status) */
     public const EVENT_SCHEDULED     = 'EventScheduled';
     /** The event is cancelled */
@@ -57,6 +59,8 @@ class JsonLDEvent extends JsonLD
     /** The event is re-scheduled */
     public const EVENT_RESCHEDULED   = 'EventRescheduled';
 
+    /** constants for availability */
+    public const __AVAILABILITY = '';
     /** Tickets available in stock  */
     public const AVAILABLE_IN_STOCK  = 'InStock';
     /** No more tickets of this categorie available  */
@@ -64,7 +68,9 @@ class JsonLDEvent extends JsonLD
     /** Tickets can be pre ordered  */
     public const AVAILABLE_PRE_ORDER = 'PreOrder';
 
-    /** Event is performed/organized by person(s) */
+    /** constants for performer/organizer */
+    public const __PERFORMER = '';
+    /** Event is performed/organized by organization */
     public const ORGANIZATION    = 'Organization';
     /** Event is performed/organized by group */
     public const GROUP           = 'PerformingGroup';
@@ -153,6 +159,7 @@ class JsonLDEvent extends JsonLD
      * - self::EVENT_MOVED_ONLINE
      * - self::EVENT_POSTPONED
      * - self::EVENT_RESCHEDULED
+     *
      * If the event has been canceled or postponed, don't remove or change other
      * properties (for example, don't remove startDate or location) instead, keep all
      * values as the same as they were before the cancelation, and only update the
