@@ -111,9 +111,9 @@ class JsonLDEvent extends JsonLD
      * @param string $strRegion     (default: '')
      * @param string $strCountry    (default: '')
      */
-    public function setAdress(string $strStreet, string $strPostcode, string $strCity, string $strRegion = '', string $strCountry = '') : void
+    public function setAddress(string $strStreet, string $strPostcode, string $strCity, string $strRegion = '', string $strCountry = '') : void
     {
-        $aAddress = $this->buildAdress($strStreet, $strPostcode, $strCity, $strRegion, $strCountry);
+        $aAddress = $this->buildAddress($strStreet, $strPostcode, $strCity, $strRegion, $strCountry);
         if (!isset($this->aJsonLD["location"]) || !is_array($this->aJsonLD["location"])) {
             $this->aJsonLD["location"] = array("@type" => "Place");
         }
@@ -239,9 +239,7 @@ class JsonLDEvent extends JsonLD
         $strName = $this->validString($strName);
         $strURL = $this->validURL($strURL);
         if (strlen($strName) > 0 && in_array($strType, $aValid)) {
-            if (!isset($this->aJsonLD["organizer"])) {
-                $this->aJsonLD["organizer"] = array("@type" => $strType);
-            }
+            $this->aJsonLD["organizer"] = array("@type" => $strType);
             $this->aJsonLD["organizer"]["name"] = $strName;
             if (strlen($strURL) > 0) {
                 $this->aJsonLD["organizer"]["url"] = $strURL;

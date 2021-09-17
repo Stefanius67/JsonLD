@@ -39,6 +39,8 @@ class JsonLD
     public const EMAIL = 3;
     /** validation for url   */
     public const URL = 4;
+    /** validation for longitude or latitude   */
+    public const LONG_LAT = 5;
 
     /** @var int    internal object type     */
     protected $iType = -1;
@@ -126,14 +128,24 @@ class JsonLD
     protected function buildImageObject(string $strURL) : ?array
     {
         $aLogo = null;
-        if (file_exists($strURL)) {
-            $aSize = getimagesize($strURL);
-            if ($aSize !== false) {
+
+        // use curl to be independet of [allow_url_fopen] enabled on the system
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $strURL);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+        $image = curl_exec($curl);
+        $iReturnCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        curl_close($curl);
+
+        if ($iReturnCode == 200 && is_string($image)) {
+            $img = imagecreatefromstring($image);
+            if ($img !== false) {
                 $aLogo = array(
-                                "@type" => "ImageObject",
-                                "url" =>  $strURL,
-                                "width" => $aSize[0],
-                                "height" => $aSize[1]
+                    "@type" => "ImageObject",
+                    "url" => $strURL,
+                    "width" => imagesx($img),
+                    "height" => imagesy($img),
                 );
             }
         }
@@ -149,7 +161,7 @@ class JsonLD
      * @param string $strCountry
      * @return array<string>    array containing the property
      */
-    protected function buildAdress(string $strStreet, string $strPostcode, string $strCity, string $strRegion = '', string $strCountry = '') : array
+    protected function buildAddress(string $strStreet, string $strPostcode, string $strCity, string $strRegion = '', string $strCountry = '') : array
     {
         $aAdress = array("@type" => "PostalAddress");
         if (strlen($strStreet) > 0) {
@@ -236,27 +248,31 @@ class JsonLD
     /**
      * Set the property to value of given type.
      * @param string $strName
-     * @param string $strValue
+     * @param mixed $value
      * @param int $iType
      */
-    public function setProperty(string $strName, string $strValue, int $iType = self::STRING) : void
+    public function setProperty(string $strName, $value, int $iType = self::STRING) : void
     {
+        $strValue = '';
         switch ($iType) {
             case self::DATE:
-                $strValue = $this->validDate($strValue);
+                $strValue = $this->validDate($value);
                 break;
             case self::TIME:
-                $strValue = $this->validTime($strValue);
+                $strValue = $this->validTime($value);
                 break;
             case self::EMAIL:
-                $strValue = $this->validEMail($strValue);
+                $strValue = $this->validEMail($value);
                 break;
             case self::URL:
-                $strValue = $this->validURL($strValue);
+                $strValue = $this->validURL($value);
+                break;
+            case self::LONG_LAT:
+                $strValue = $this->validLongLat($value);
                 break;
             case self::STRING:
             default:
-                $strValue = $this->validString($strValue);
+                $strValue = $this->validString($value);
                 break;
         }
         if (strlen($strValue) > 0) {
@@ -394,8 +410,10 @@ class JsonLD
      */
     protected function validURL(string $strURL) : string
     {
-        if (!($strURL = filter_var($strURL, FILTER_VALIDATE_URL))) {
+        $strOrgURL = $strURL;
+        if (strlen($strURL) > 0 && !($strURL = filter_var($strURL, FILTER_VALIDATE_URL))) {
             $strURL = '';
+            trigger_error('Passed invalid URL: ' . $strOrgURL, E_USER_WARNING);
         }
         return $strURL;
     }
@@ -407,8 +425,10 @@ class JsonLD
      */
     protected function validEMail(string $strEMail) : string
     {
-        if (!($strEMail = filter_var($strEMail, FILTER_VALIDATE_EMAIL))) {
+        $strOrgEMail = $strEMail;
+        if (strlen($strEMail) > 0 && !($strEMail = filter_var($strEMail, FILTER_VALIDATE_EMAIL))) {
             $strEMail = '';
+            trigger_error('Passed invalid e-Mail: ' . $strOrgEMail, E_USER_WARNING);
         }
         return $strEMail;
     }

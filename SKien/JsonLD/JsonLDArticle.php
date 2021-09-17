@@ -44,10 +44,12 @@ class JsonLDArticle extends JsonLD
     public function __construct(string $strType = 'NewsArticle')
     {
         parent::__construct(self::ARTICLE, $strType);
+        $strID = $_SERVER['HTTP_HOST'] ?? 'UNKNOWN_HOST';
+        $strID .= $_SERVER['REQUEST_URI'] ?? '_UNKNOWN_REQUEST_URI';
         $this->aJsonLD["mainEntityOfPage"] = array(
-                "@type" => "WebPage",
-                "id"    => $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']
-            );
+            "@type" => "WebPage",
+            "id"    => $strID,
+        );
     }
 
     /**
@@ -83,7 +85,7 @@ class JsonLDArticle extends JsonLD
     public function setLogo(string $strLogoURL) : void
     {
         $aLogo = $this->buildImageObject($strLogoURL);
-        if ($aLogo != null) {
+        if ($aLogo !== null) {
             if (!isset($this->aJsonLD["publisher"])) {
                 $this->aJsonLD["publisher"] = array("@type" => "Organization");
             }

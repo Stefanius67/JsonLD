@@ -73,10 +73,11 @@ class JsonLDLocalBusiness extends JsonLD
     public function __construct(string $strType = 'Organization', bool $bIsChild = false)
     {
         parent::__construct(self::LOCAL_BUSINESS, $strType, $bIsChild);
+        $strID = $_SERVER['HTTP_HOST'] ?? 'UNKNOWN_HOST';
         if (!$bIsChild) {
-            $this->aJsonLD["@id"] = $_SERVER['HTTP_HOST'];
+            $this->aJsonLD["@id"] = $strID;
         }
-        $this->aJsonLD["url"] = $_SERVER['HTTP_HOST'];
+        $this->aJsonLD["url"] = $strID;
     }
 
     /**
@@ -97,8 +98,6 @@ class JsonLDLocalBusiness extends JsonLD
                 $this->aJsonLD["@id"] = strlen($strId) == 0 ? $strURL : $strId;
             }
             $this->aJsonLD["url"] = $strURL;
-        } else {
-            trigger_error('invalid URL for Json-LD: ' . $strURL, E_USER_WARNING);
         }
     }
 
@@ -121,8 +120,6 @@ class JsonLDLocalBusiness extends JsonLD
             if (strlen($strPhone) > 0) {
                 $this->aJsonLD["telephone"] = $strPhone;
             }
-        } else {
-            trigger_error('invalid Name for Json-LD: ' . $strName, E_USER_WARNING);
         }
     }
 
@@ -136,9 +133,9 @@ class JsonLDLocalBusiness extends JsonLD
      * @param string $strRegion     (default: '')
      * @param string $strCountry    (default: '')
      */
-    public function setAdress(string $strStreet, string $strPostcode, string $strCity, string $strRegion = '', string $strCountry = '') : void
+    public function setAddress(string $strStreet, string $strPostcode, string $strCity, string $strRegion = '', string $strCountry = '') : void
     {
-        $this->aJsonLD["address"] = $this->buildAdress($strStreet, $strPostcode, $strCity, $strRegion, $strCountry);
+        $this->aJsonLD["address"] = $this->buildAddress($strStreet, $strPostcode, $strCity, $strRegion, $strCountry);
     }
 
     /**
