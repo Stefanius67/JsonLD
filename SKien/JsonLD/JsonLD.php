@@ -123,7 +123,7 @@ class JsonLD
      * Build ImageObject property.
      * Logos and images are defiend as ImageObject.
      * @param string $strURL    URL to a valid image (PNG, GIF, JPG)
-     * @return array<string>    array containing the property or null if invalid URL
+     * @return array<string,int|string>    array containing the property or null if invalid URL
      */
     protected function buildImageObject(string $strURL) : ?array
     {
@@ -410,12 +410,15 @@ class JsonLD
      */
     protected function validURL(string $strURL) : string
     {
-        $strOrgURL = $strURL;
-        if (strlen($strURL) > 0 && !($strURL = filter_var($strURL, FILTER_VALIDATE_URL))) {
-            $strURL = '';
-            trigger_error('Passed invalid URL: ' . $strOrgURL, E_USER_WARNING);
+        if (strlen($strURL) == 0) {
+            return '';
         }
-        return $strURL;
+        $strValidURL = filter_var($strURL, FILTER_VALIDATE_URL);
+        if ($strValidURL === false) {
+            $strValidURL = '';
+            trigger_error('Passed invalid URL: ' . $strURL, E_USER_WARNING);
+        }
+        return $strValidURL;
     }
 
     /**
@@ -425,12 +428,15 @@ class JsonLD
      */
     protected function validEMail(string $strEMail) : string
     {
-        $strOrgEMail = $strEMail;
-        if (strlen($strEMail) > 0 && !($strEMail = filter_var($strEMail, FILTER_VALIDATE_EMAIL))) {
-            $strEMail = '';
-            trigger_error('Passed invalid e-Mail: ' . $strOrgEMail, E_USER_WARNING);
+        if (strlen($strEMail) == 0) {
+            return '';
         }
-        return $strEMail;
+        $strValidEMail = filter_var($strEMail, FILTER_VALIDATE_EMAIL);
+        if ($strValidEMail === false) {
+            $strValidEMail = '';
+            trigger_error('Passed invalid e-Mail: ' . $strEMail, E_USER_WARNING);
+        }
+        return $strValidEMail;
     }
 
     /**
